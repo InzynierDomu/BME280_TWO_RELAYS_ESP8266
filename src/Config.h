@@ -1,3 +1,11 @@
+/**
+ * @file Config.h
+ * @brief Configuration file
+ * @author by Szymon Markiewicz
+ * @details http://www.inzynierdomu.pl/
+ * @date 03-2021
+ */
+
 namespace config
 {
   const char* wifi_ssid = "ssid";     ///< WiFi ssid 

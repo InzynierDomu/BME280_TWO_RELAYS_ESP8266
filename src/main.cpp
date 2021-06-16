@@ -1,3 +1,11 @@
+/**
+ * @file main.cpp
+ * @brief main app
+ * @author by Szymon Markiewicz
+ * @details http://www.inzynierdomu.pl/
+ * @date 03-2021
+ */
+
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>

@@ -1,7 +1,10 @@
 # BME280_TWO_RELAYS_ESP8266
+* [About] (#About)
 * [Scheme](#Scheme)
 * [IDE](#IDE)
 
+## About
+The project described in note https://www.inzynierdomu.pl/budzetowy-smart-nawilzacz-powietrza-i-lampka-do-roslin/
 ## Scheme
 ![alt text](https://github.com/InzynierDomu/BME280_TWO_RELAYS_ESP8266/blob/main/schem.PNG)
 ## IDE

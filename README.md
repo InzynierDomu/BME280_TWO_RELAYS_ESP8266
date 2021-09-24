@@ -1,5 +1,5 @@
 # BME280_TWO_RELAYS_ESP8266
-* [About] (#About)
+* [About](#About)
 * [Scheme](#Scheme)
 * [IDE](#IDE)
 

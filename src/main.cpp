@@ -6,14 +6,15 @@
  * @date 03-2021
  */
 
+#include "Config.h"
+
+#include <Adafruit_BME280.h>
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include <Adafruit_BME280.h>
-#include "Config.h"
 
-Adafruit_BME280 m_bme_sensor;       ///< BME280 i2c temperature, humidity and pressure sensor 
-WiFiClient m_espClient;             ///< WiFi client
+Adafruit_BME280 m_bme_sensor; ///< BME280 i2c temperature, humidity and pressure sensor
+WiFiClient m_espClient; ///< WiFi client
 PubSubClient m_client(m_espClient); ///< MQTT client
 
 /**
@@ -25,13 +26,13 @@ void change_output(byte pin, byte* state)
 {
   if ((char)*state == '1')
   {
-    digitalWrite(pin, HIGH); 
+    digitalWrite(pin, HIGH);
     Serial.println("High");
-  } 
+  }
   else if ((char)*state == '0')
   {
     digitalWrite(pin, LOW);
-    Serial.println("Low"); 
+    Serial.println("Low");
   }
   else
   {
@@ -44,19 +45,20 @@ void change_output(byte pin, byte* state)
  * @param topic topic where message arrived
  * @param payload contet of message
  * @param lenght content lenght
- */ 
-void callback(char* topic, byte* payload, unsigned int length) {
+ */
+void callback(char* topic, byte* payload, unsigned int length)
+{
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
   Serial.print((char)*payload);
   Serial.println();
 
-  if(config::lamp_topic.equals(topic))
+  if (config::lamp_topic.equals(topic))
   {
     change_output(config::relay_lamp_pin, payload);
   }
-  else if(config::humidifier_topic.equals(topic))
+  else if (config::humidifier_topic.equals(topic))
   {
     change_output(config::relay_humidifier_pin, payload);
   }
@@ -64,14 +66,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 /**
  * @brief BME280 initialization
- */ 
+ */
 void Bme_init()
 {
-  if(m_bme_sensor.begin(BME280_ADDRESS_ALTERNATE))
+  if (m_bme_sensor.begin(BME280_ADDRESS_ALTERNATE))
   {
-    Serial.println("BME sensor alt"); 
+    Serial.println("BME sensor alt");
   }
-  else if(m_bme_sensor.begin(BME280_ADDRESS))
+  else if (m_bme_sensor.begin(BME280_ADDRESS))
   {
     Serial.println("BME sensor");
   }
@@ -83,8 +85,9 @@ void Bme_init()
 
 /**
  * @brief WiFi initialization
- */ 
-void setup_wifi() {
+ */
+void setup_wifi()
+{
   delay(10);
   Serial.println();
   Serial.print("Connecting to ");
@@ -92,7 +95,8 @@ void setup_wifi() {
 
   WiFi.begin(config::wifi_ssid, config::wifi_pass);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -105,14 +109,19 @@ void setup_wifi() {
 
 /**
  * @brief reconnect to MQTT and subscribe
- */ 
-void reconnect() {
-  while (!m_client.connected()) {
+ */
+void reconnect()
+{
+  while (!m_client.connected())
+  {
     Serial.print("Attempting MQTT connection...");
-    if (m_client.connect("ESP8266Client", config::mqtt_user, config::mqtt_pass)) {
+    if (m_client.connect("ESP8266Client", config::mqtt_user, config::mqtt_pass))
+    {
       Serial.println("connected");
       m_client.subscribe(config::sub_topic);
-    } else {
+    }
+    else
+    {
       Serial.print("failed, rc=");
       Serial.print(m_client.state());
       Serial.println(" try again in 5 seconds");
@@ -123,12 +132,13 @@ void reconnect() {
 
 /**
  * @brief main setup
- */ 
-void setup() {
-  pinMode(config::relay_lamp_pin, OUTPUT); 
-  pinMode(config::relay_humidifier_pin, OUTPUT);    
-  digitalWrite(config::relay_lamp_pin, LOW); 
-  digitalWrite(config::relay_humidifier_pin, LOW); 
+ */
+void setup()
+{
+  pinMode(config::relay_lamp_pin, OUTPUT);
+  pinMode(config::relay_humidifier_pin, OUTPUT);
+  digitalWrite(config::relay_lamp_pin, LOW);
+  digitalWrite(config::relay_humidifier_pin, LOW);
 
   Serial.begin(9600);
   setup_wifi();
@@ -140,16 +150,18 @@ void setup() {
 
 /**
  * @brief main loop
- */ 
-void loop() {
-  if (!m_client.connected()) {
+ */
+void loop()
+{
+  if (!m_client.connected())
+  {
     reconnect();
   }
   m_client.loop();
-  
+
   static long last_loop_time = 0;
   long loop_time = millis();
-  if(loop_time - last_loop_time > config::repet_time_period)
+  if (loop_time - last_loop_time > config::repet_time_period)
   {
     char buf[10];
     float measure = m_bme_sensor.readTemperature();

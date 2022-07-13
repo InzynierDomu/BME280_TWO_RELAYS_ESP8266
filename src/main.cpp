@@ -1,8 +1,7 @@
 /**
  * @file main.cpp
  * @brief main app
- * @author by Szymon Markiewicz
- * @details http://www.inzynierdomu.pl/
+ * @author by Szymon Markiewicz (https://github.com/InzynierDomu/)
  * @date 03-2021
  */
 
@@ -22,7 +21,7 @@ PubSubClient m_client(m_espClient); ///< MQTT client
  * @param pin output pin to change
  * @param state '0' or '1' for low or high state to change
  */
-void change_output(byte pin, byte* state)
+void change_output(const byte pin, byte* state)
 {
   if ((char)*state == '1')
   {
@@ -88,7 +87,6 @@ void Bme_init()
  */
 void setup_wifi()
 {
-  delay(10);
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(config::wifi_ssid);
